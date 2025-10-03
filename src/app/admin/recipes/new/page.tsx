@@ -219,10 +219,11 @@ export default function NewRecipePage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        router.push(`/admin/recipes/${data.id}`);
+        await response.json();
+        router.push(`/admin/recipes`);
       } else {
         const errorData = await response.json();
+        console.error("Recipe creation error:", errorData);
         setError(errorData.error || "Произошла ошибка при создании рецепта");
       }
     } catch {

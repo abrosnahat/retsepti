@@ -36,6 +36,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Доступ запрещен" }, { status: 403 });
     }
 
+    const body = await request.json();
+    console.log("Received recipe data:", body);
+    console.log("Session user:", session.user);
+    console.log("Session user ID:", session.user.id);
+    console.log("Session user ID type:", typeof session.user.id);
+
     const {
       title,
       slug,
@@ -51,7 +57,7 @@ export async function POST(request: NextRequest) {
       featured,
       ingredients,
       instructions,
-    } = await request.json();
+    } = body;
 
     // Валидация обязательных полей
     if (!title || !categoryId) {
@@ -73,6 +79,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Проверяем существование пользователя по email
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email! },
+    });
+
+    if (!user) {
+      console.error("User not found by email:", session.user.email);
+      console.error(
+        "Available users:",
+        await prisma.user.findMany({ select: { id: true, email: true } })
+      );
+      return NextResponse.json(
+        { error: "Пользователь не найден" },
+        { status: 400 }
+      );
+    }
+
+    console.log("Creating recipe with authorId:", user.id);
+    console.log("Category found:", category.name);
+    console.log("User found:", user.email);
+
     // Создаем рецепт
     const recipe = await prisma.recipe.create({
       data: {
@@ -86,7 +113,7 @@ export async function POST(request: NextRequest) {
         servings: servings || null,
         difficulty: difficulty || "easy",
         categoryId,
-        authorId: session.user.id,
+        authorId: user.id,
         published: Boolean(published),
         featured: Boolean(featured),
         ingredients: ingredients || "[]",
