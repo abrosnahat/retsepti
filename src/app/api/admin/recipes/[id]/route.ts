@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -14,11 +14,12 @@ export async function PATCH(
       return NextResponse.json({ error: "Доступ запрещен" }, { status: 403 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const { published, featured } = body;
 
     const recipe = await prisma.recipe.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!recipe) {
@@ -26,7 +27,7 @@ export async function PATCH(
     }
 
     const updatedRecipe = await prisma.recipe.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(published !== undefined && { published }),
         ...(featured !== undefined && { featured }),
@@ -60,7 +61,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -69,8 +70,9 @@ export async function DELETE(
       return NextResponse.json({ error: "Доступ запрещен" }, { status: 403 });
     }
 
+    const { id } = await params;
     const recipe = await prisma.recipe.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!recipe) {
@@ -78,7 +80,7 @@ export async function DELETE(
     }
 
     await prisma.recipe.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Рецепт успешно удален" });

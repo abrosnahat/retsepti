@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -14,8 +14,9 @@ export async function GET(
       return NextResponse.json({ error: "Доступ запрещен" }, { status: 403 });
     }
 
+    const { id } = await params;
     const recipe = await prisma.recipe.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         category: {
           select: {
@@ -48,7 +49,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -57,6 +58,7 @@ export async function PUT(
       return NextResponse.json({ error: "Доступ запрещен" }, { status: 403 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const {
       title,
@@ -75,7 +77,7 @@ export async function PUT(
 
     // Проверяем существование рецепта
     const existingRecipe = await prisma.recipe.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingRecipe) {
@@ -86,7 +88,7 @@ export async function PUT(
     const recipeWithSlug = await prisma.recipe.findFirst({
       where: {
         slug,
-        id: { not: params.id },
+        id: { not: id },
       },
     });
 
@@ -110,7 +112,7 @@ export async function PUT(
     }
 
     const updatedRecipe = await prisma.recipe.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: title.trim(),
         slug,

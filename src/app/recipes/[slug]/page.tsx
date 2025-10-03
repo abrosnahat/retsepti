@@ -4,10 +4,21 @@ import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { ChefHat, Clock, Users, ArrowLeft, Calendar } from "lucide-react";
 
+interface Ingredient {
+  name: string;
+  amount: string;
+  unit: string;
+}
+
+interface Instruction {
+  step?: number;
+  description: string;
+}
+
 interface RecipePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 async function getRecipe(slug: string) {
@@ -30,7 +41,8 @@ async function getRecipe(slug: string) {
 }
 
 export async function generateMetadata({ params }: RecipePageProps) {
-  const recipe = await getRecipe(params.slug);
+  const { slug } = await params;
+  const recipe = await getRecipe(slug);
 
   if (!recipe) {
     return {
@@ -51,14 +63,17 @@ export async function generateMetadata({ params }: RecipePageProps) {
 }
 
 export default async function RecipePage({ params }: RecipePageProps) {
-  const recipe = await getRecipe(params.slug);
+  const { slug } = await params;
+  const recipe = await getRecipe(slug);
 
   if (!recipe) {
     notFound();
   }
 
-  const ingredients = recipe.ingredients ? JSON.parse(recipe.ingredients) : [];
-  const instructions = recipe.instructions
+  const ingredients: Ingredient[] = recipe.ingredients
+    ? JSON.parse(recipe.ingredients)
+    : [];
+  const instructions: Instruction[] = recipe.instructions
     ? JSON.parse(recipe.instructions)
     : [];
 
@@ -182,18 +197,20 @@ export default async function RecipePage({ params }: RecipePageProps) {
                     Пошаговые инструкции
                   </h2>
                   <div className="space-y-6">
-                    {instructions.map((instruction: any, index: number) => (
-                      <div key={index} className="flex gap-4">
-                        <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center text-sm font-bold text-rose-600 flex-shrink-0">
-                          {instruction.step || index + 1}
+                    {instructions.map(
+                      (instruction: Instruction, index: number) => (
+                        <div key={index} className="flex gap-4">
+                          <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center text-sm font-bold text-rose-600 flex-shrink-0">
+                            {instruction.step || index + 1}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-gray-700 leading-relaxed">
+                              {instruction.description}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <p className="text-gray-700 leading-relaxed">
-                            {instruction.description}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 </div>
               )}
@@ -256,14 +273,21 @@ export default async function RecipePage({ params }: RecipePageProps) {
                     Ингредиенты
                   </h3>
                   <ul className="space-y-2">
-                    {ingredients.map((ingredient: any, index: number) => (
-                      <li key={index} className="flex justify-between text-sm">
-                        <span className="text-gray-700">{ingredient.name}</span>
-                        <span className="text-gray-600">
-                          {ingredient.amount} {ingredient.unit}
-                        </span>
-                      </li>
-                    ))}
+                    {ingredients.map(
+                      (ingredient: Ingredient, index: number) => (
+                        <li
+                          key={index}
+                          className="flex justify-between text-sm"
+                        >
+                          <span className="text-gray-700">
+                            {ingredient.name}
+                          </span>
+                          <span className="text-gray-600">
+                            {ingredient.amount} {ingredient.unit}
+                          </span>
+                        </li>
+                      )
+                    )}
                   </ul>
                 </div>
               )}
