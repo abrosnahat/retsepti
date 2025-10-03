@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { ChefHat, ArrowLeft, Save, Plus, X } from "lucide-react";
 
@@ -374,15 +375,15 @@ export default function NewRecipePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Сложность
                   </label>
-                  <select
+                  <Select
                     value={difficulty}
                     onChange={(e) => setDifficulty(e.target.value)}
-                    className="w-full h-10 px-3 py-2 text-sm bg-white/20 backdrop-blur-md border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
                   >
+                    <option value="">Выберите сложность</option>
                     <option value="easy">Легко</option>
                     <option value="medium">Средне</option>
                     <option value="hard">Сложно</option>
-                  </select>
+                  </Select>
                 </div>
               </div>
 
@@ -390,10 +391,9 @@ export default function NewRecipePage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Категория *
                 </label>
-                <select
+                <Select
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
-                  className="w-full h-10 px-3 py-2 text-sm bg-white/20 backdrop-blur-md border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
                   required
                 >
                   <option value="">Выберите категорию</option>
@@ -402,7 +402,7 @@ export default function NewRecipePage() {
                       {category.name}
                     </option>
                   ))}
-                </select>
+                </Select>
               </div>
             </div>
 

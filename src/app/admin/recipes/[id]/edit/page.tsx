@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { ChefHat, ArrowLeft, Save, Loader2 } from "lucide-react";
 
@@ -336,18 +337,17 @@ export default function EditRecipePage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Сложность
                     </label>
-                    <select
+                    <Select
                       value={formData.difficulty}
                       onChange={(e) =>
                         setFormData({ ...formData, difficulty: e.target.value })
                       }
-                      className="w-full glass rounded-md border border-gray-300 px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500"
                     >
                       <option value="">Выберите сложность</option>
                       <option value="easy">Легко</option>
                       <option value="medium">Средне</option>
                       <option value="hard">Сложно</option>
-                    </select>
+                    </Select>
                   </div>
                 </div>
 
@@ -355,13 +355,12 @@ export default function EditRecipePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Категория *
                   </label>
-                  <select
+                  <Select
                     value={formData.categoryId}
                     onChange={(e) =>
                       setFormData({ ...formData, categoryId: e.target.value })
                     }
                     required
-                    className="w-full glass rounded-md border border-gray-300 px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   >
                     <option value="">Выберите категорию</option>
                     {categories.map((category) => (
@@ -369,7 +368,7 @@ export default function EditRecipePage() {
                         {category.name}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
               </div>
             </div>
