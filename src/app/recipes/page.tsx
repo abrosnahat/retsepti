@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { ChefHat, Clock, Users, ArrowLeft } from "lucide-react";
+import { ChefHat, ArrowLeft } from "lucide-react";
+import { RecipeCard } from "@/components/recipe-card";
 
 async function getAllRecipes() {
   return await prisma.recipe.findMany({
@@ -80,44 +81,7 @@ export default async function RecipesPage() {
 
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {recipes.map((recipe) => (
-                  <Link
-                    key={recipe.id}
-                    href={`/recipes/${recipe.slug}`}
-                    className="group"
-                  >
-                    <div className="glass rounded-xl p-6 hover:bg-white/40 transition-all transform hover:scale-105">
-                      {recipe.mainImage && (
-                        <div className="aspect-video mb-4 rounded-lg overflow-hidden">
-                          <img
-                            src={recipe.mainImage}
-                            alt={recipe.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          />
-                        </div>
-                      )}
-                      <div className="text-sm text-rose-600 mb-2">
-                        {recipe.category.name}
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-rose-600 transition-colors">
-                        {recipe.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                        {recipe.description}
-                      </p>
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <div className="flex items-center">
-                          <Clock className="h-4 w-4 mr-1" />
-                          {recipe.prepTime && recipe.cookTime
-                            ? `${recipe.prepTime + recipe.cookTime} мин`
-                            : "Время не указано"}
-                        </div>
-                        <div className="flex items-center">
-                          <Users className="h-4 w-4 mr-1" />
-                          {recipe.servings || "не указано"}
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
+                  <RecipeCard key={recipe.id} recipe={recipe} showCategory />
                 ))}
               </div>
             </>
