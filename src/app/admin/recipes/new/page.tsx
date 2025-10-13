@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import ImageUploadLocal from "@/components/image-upload-local";
+import { uploadImagesInContent } from "@/lib/image-upload-utils";
 import { ChefHat, ArrowLeft, Save, Plus, X } from "lucide-react";
 
 interface Category {
@@ -38,7 +40,10 @@ export default function NewRecipePage() {
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
-  const [mainImage, setMainImage] = useState("");
+  const [contentImageFiles, setContentImageFiles] = useState<Map<string, File>>(
+    new Map()
+  );
+  const [mainImageFile, setMainImageFile] = useState<File | null>(null);
   const [prepTime, setPrepTime] = useState<number | "">("");
   const [cookTime, setCookTime] = useState<number | "">("");
   const [servings, setServings] = useState<number | "">("");
@@ -56,6 +61,7 @@ export default function NewRecipePage() {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -192,6 +198,46 @@ export default function NewRecipePage() {
     setError("");
 
     try {
+      let uploadedImageUrl = null;
+
+      // Шаг 1: Загружаем главное изображение
+      if (mainImageFile) {
+        setUploadingImage(true);
+        const formData = new FormData();
+        formData.append("file", mainImageFile);
+
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          const uploadError = await uploadResponse.json();
+          throw new Error(uploadError.error || "Ошибка загрузки изображения");
+        }
+
+        const uploadData = await uploadResponse.json();
+        uploadedImageUrl = uploadData.url;
+        setUploadingImage(false);
+      }
+
+      // Шаг 2: Загружаем изображения из контента (Rich Text Editor)
+      let processedContent = content;
+      if (contentImageFiles.size > 0) {
+        setUploadingImage(true);
+        try {
+          processedContent = await uploadImagesInContent(
+            content,
+            contentImageFiles
+          );
+        } catch (error) {
+          console.error("Ошибка загрузки изображений из контента:", error);
+          // Продолжаем с оригинальным контентом если ошибка
+        }
+        setUploadingImage(false);
+      }
+
+      // Шаг 3: Создаем рецепт с загруженными изображениями
       const response = await fetch("/api/recipes", {
         method: "POST",
         headers: {
@@ -201,8 +247,8 @@ export default function NewRecipePage() {
           title,
           slug,
           description,
-          content,
-          mainImage: mainImage || null,
+          content: processedContent,
+          mainImage: uploadedImageUrl || null,
           prepTime: prepTime || null,
           cookTime: cookTime || null,
           servings: servings || null,
@@ -315,14 +361,9 @@ export default function NewRecipePage() {
 
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  URL главного изображения
+                  Главное изображение
                 </label>
-                <Input
-                  value={mainImage}
-                  onChange={(e) => setMainImage(e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  type="url"
-                />
+                <ImageUploadLocal onFileSelect={setMainImageFile} />
               </div>
 
               <div className="grid md:grid-cols-4 gap-4 mt-6">
@@ -540,6 +581,7 @@ export default function NewRecipePage() {
               <RichTextEditor
                 content={content}
                 onChange={setContent}
+                onImageFilesChange={setContentImageFiles}
                 placeholder="Добавьте подробное описание рецепта, советы по приготовлению, историю блюда и другую полезную информацию..."
               />
             </div>
@@ -606,7 +648,9 @@ export default function NewRecipePage() {
                 {isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin mr-2" />
-                    Сохранение...
+                    {uploadingImage
+                      ? "Загрузка изображения..."
+                      : "Сохранение рецепта..."}
                   </>
                 ) : (
                   <>
