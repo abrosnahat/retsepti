@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ChefHat, ArrowLeft, BookOpen } from "lucide-react";
 import { RecipeCard } from "@/components/recipe-card";
+import Footer from "@/components/footer";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -174,6 +175,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

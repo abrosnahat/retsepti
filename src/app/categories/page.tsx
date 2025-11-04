@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ChefHat, ArrowLeft, BookOpen } from "lucide-react";
+import Footer from "@/components/footer";
 
 interface Category {
   id: string;
@@ -127,6 +128,8 @@ export default async function CategoriesPage() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ChefHat, Star } from "lucide-react";
 import { RecipeCard } from "@/components/recipe-card";
+import Footer from "@/components/footer";
 
 async function getLatestRecipes() {
   return await prisma.recipe.findMany({
@@ -148,17 +149,7 @@ export default async function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="glass mt-20 py-8 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <ChefHat className="h-6 w-6 text-rose-600" />
-            <span className="text-xl font-bold text-gray-800">Рецепты</span>
-          </div>
-          <p className="text-gray-600">
-            © 2024 Кулинарные шедевры. Все права защищены.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

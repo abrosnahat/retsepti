@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { ChefHat, Clock, Users, ArrowLeft, Calendar } from "lucide-react";
+import Footer from "@/components/footer";
 
 interface Ingredient {
   name: string;
@@ -295,6 +296,8 @@ export default async function RecipePage({ params }: RecipePageProps) {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

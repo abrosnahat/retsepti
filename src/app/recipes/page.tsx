@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ChefHat, ArrowLeft } from "lucide-react";
 import { RecipeCard } from "@/components/recipe-card";
+import Footer from "@/components/footer";
 
 async function getAllRecipes() {
   return await prisma.recipe.findMany({
@@ -88,6 +89,8 @@ export default async function RecipesPage() {
           )}
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
