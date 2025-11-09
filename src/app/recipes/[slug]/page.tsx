@@ -23,22 +23,27 @@ interface RecipePageProps {
 }
 
 async function getRecipe(slug: string) {
-  const recipe = await prisma.recipe.findUnique({
-    where: {
-      slug,
-      published: true,
-    },
-    include: {
-      category: true,
-      author: {
-        select: {
-          name: true,
+  try {
+    const recipe = await prisma.recipe.findUnique({
+      where: {
+        slug,
+        published: true,
+      },
+      include: {
+        category: true,
+        author: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  return recipe;
+    return recipe;
+  } catch (error) {
+    console.error("Error fetching recipe:", error);
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: RecipePageProps) {

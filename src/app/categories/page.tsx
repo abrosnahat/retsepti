@@ -14,22 +14,27 @@ interface Category {
 }
 
 async function getCategories(): Promise<Category[]> {
-  const categories = await prisma.category.findMany({
-    include: {
-      _count: {
-        select: {
-          recipes: {
-            where: {
-              published: true,
+  try {
+    const categories = await prisma.category.findMany({
+      include: {
+        _count: {
+          select: {
+            recipes: {
+              where: {
+                published: true,
+              },
             },
           },
         },
       },
-    },
-    orderBy: { name: "asc" },
-  });
+      orderBy: { name: "asc" },
+    });
 
-  return categories;
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
+  }
 }
 
 export const metadata: Metadata = {

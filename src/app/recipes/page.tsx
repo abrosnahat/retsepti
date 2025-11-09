@@ -6,22 +6,27 @@ import Footer from "@/components/footer";
 import type { Metadata } from "next";
 
 async function getAllRecipes() {
-  return await prisma.recipe.findMany({
-    where: {
-      published: true,
-    },
-    include: {
-      category: true,
-      author: {
-        select: {
-          name: true,
+  try {
+    return await prisma.recipe.findMany({
+      where: {
+        published: true,
+      },
+      include: {
+        category: true,
+        author: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching all recipes:", error);
+    return [];
+  }
 }
 
 export const metadata: Metadata = {

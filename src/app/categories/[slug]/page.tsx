@@ -34,30 +34,35 @@ interface CategoryWithRecipes {
 }
 
 async function getCategory(slug: string): Promise<CategoryWithRecipes | null> {
-  const category = await prisma.category.findUnique({
-    where: {
-      slug,
-    },
-    include: {
-      recipes: {
-        where: {
-          published: true,
-        },
-        include: {
-          author: {
-            select: {
-              name: true,
+  try {
+    const category = await prisma.category.findUnique({
+      where: {
+        slug,
+      },
+      include: {
+        recipes: {
+          where: {
+            published: true,
+          },
+          include: {
+            author: {
+              select: {
+                name: true,
+              },
             },
           },
-        },
-        orderBy: {
-          createdAt: "desc",
+          orderBy: {
+            createdAt: "desc",
+          },
         },
       },
-    },
-  });
+    });
 
-  return category;
+    return category;
+  } catch (error) {
+    console.error("Error fetching category:", error);
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: CategoryPageProps) {

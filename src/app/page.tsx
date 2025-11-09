@@ -38,41 +38,51 @@ export const metadata: Metadata = {
 };
 
 async function getLatestRecipes() {
-  return await prisma.recipe.findMany({
-    where: {
-      published: true,
-    },
-    include: {
-      category: true,
-      author: {
-        select: {
-          name: true,
+  try {
+    return await prisma.recipe.findMany({
+      where: {
+        published: true,
+      },
+      include: {
+        category: true,
+        author: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 6,
-  });
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 6,
+    });
+  } catch (error) {
+    console.error("Error fetching latest recipes:", error);
+    return [];
+  }
 }
 
 async function getFeaturedRecipes() {
-  return await prisma.recipe.findMany({
-    where: {
-      published: true,
-      featured: true,
-    },
-    include: {
-      category: true,
-      author: {
-        select: {
-          name: true,
+  try {
+    return await prisma.recipe.findMany({
+      where: {
+        published: true,
+        featured: true,
+      },
+      include: {
+        category: true,
+        author: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-    take: 3,
-  });
+      take: 3,
+    });
+  } catch (error) {
+    console.error("Error fetching featured recipes:", error);
+    return [];
+  }
 }
 
 export default async function Home() {
