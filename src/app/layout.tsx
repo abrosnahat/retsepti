@@ -10,9 +10,64 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Рецепты - Кулинарные шедевры",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
+  ),
+  title: {
+    default: "Рецепты - Кулинарные шедевры",
+    template: "%s | Рецепты",
+  },
   description:
-    "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями",
+    "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями. Найдите идеальный рецепт для любого случая.",
+  keywords: [
+    "рецепты",
+    "кулинария",
+    "готовка",
+    "еда",
+    "кухня",
+    "пошаговые рецепты",
+    "рецепты с фото",
+    "домашняя кухня",
+  ],
+  authors: [{ name: "Рецепты" }],
+  creator: "Рецепты",
+  publisher: "Рецепты",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    url: "/",
+    siteName: "Рецепты",
+    title: "Рецепты - Кулинарные шедевры",
+    description:
+      "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями. Найдите идеальный рецепт для любого случая.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Рецепты - Кулинарные шедевры",
+    description:
+      "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями.",
+    creator: "@recipes",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    // google: "your-google-verification-code",
+    // yandex: "your-yandex-verification-code",
+  },
 };
 
 export default async function RootLayout({

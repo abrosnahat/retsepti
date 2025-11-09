@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ChefHat, ArrowLeft, BookOpen } from "lucide-react";
 import Footer from "@/components/footer";
+import type { Metadata } from "next";
 
 interface Category {
   id: string;
@@ -31,17 +32,88 @@ async function getCategories(): Promise<Category[]> {
   return categories;
 }
 
-export const metadata = {
-  title: "Категории рецептов - Рецепты",
+export const metadata: Metadata = {
+  title: "Категории рецептов",
   description:
-    "Все категории рецептов. Найдите рецепты по интересующей вас категории.",
+    "Все категории рецептов. Найдите рецепты по интересующей вас категории: завтраки, обеды, ужины, десерты, выпечка, салаты и многое другое.",
+  keywords: [
+    "категории рецептов",
+    "рецепты по категориям",
+    "завтраки",
+    "обеды",
+    "ужины",
+    "десерты",
+    "выпечка",
+    "салаты",
+  ],
+  openGraph: {
+    title: "Категории рецептов",
+    description:
+      "Все категории рецептов. Найдите рецепты по интересующей вас категории.",
+    type: "website",
+    url: "/categories",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Категории рецептов",
+    description:
+      "Все категории рецептов. Найдите рецепты по интересующей вас категории.",
+  },
+  alternates: {
+    canonical: "/categories",
+  },
 };
 
 export default async function CategoriesPage() {
   const categories = await getCategories();
 
+  // Структурированные данные для категорий
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Главная",
+        item: process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Категории",
+        item: `${
+          process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
+        }/categories`,
+      },
+    ],
+  };
+
+  const collectionPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Категории рецептов",
+    description:
+      "Все категории рецептов. Найдите рецепты по интересующей вас категории.",
+    url: `${
+      process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
+    }/categories`,
+  };
+
   return (
     <div className="min-h-screen">
+      {/* Структурированные данные JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(collectionPageSchema),
+        }}
+      />
+
       {/* Navigation */}
       <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

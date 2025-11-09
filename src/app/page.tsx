@@ -3,6 +3,39 @@ import { prisma } from "@/lib/prisma";
 import { ChefHat, Star } from "lucide-react";
 import { RecipeCard } from "@/components/recipe-card";
 import Footer from "@/components/footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Рецепты - Кулинарные шедевры",
+  description:
+    "Откройте для себя мир восхитительных рецептов с пошаговыми инструкциями и красивыми фотографиями. Найдите идеальный рецепт для завтрака, обеда, ужина и десерта.",
+  keywords: [
+    "рецепты",
+    "кулинария",
+    "готовка",
+    "домашняя еда",
+    "пошаговые рецепты",
+    "рецепты с фото",
+    "простые рецепты",
+    "вкусные рецепты",
+  ],
+  openGraph: {
+    title: "Рецепты - Кулинарные шедевры",
+    description:
+      "Откройте для себя мир восхитительных рецептов с пошаговыми инструкциями и красивыми фотографиями.",
+    type: "website",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Рецепты - Кулинарные шедевры",
+    description:
+      "Откройте для себя мир восхитительных рецептов с пошаговыми инструкциями и красивыми фотографиями.",
+  },
+  alternates: {
+    canonical: "/",
+  },
+};
 
 async function getLatestRecipes() {
   return await prisma.recipe.findMany({
@@ -48,8 +81,49 @@ export default async function Home() {
     getFeaturedRecipes(),
   ]);
 
+  // Структурированные данные для главной страницы
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Рецепты",
+    description:
+      "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${
+          process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
+        }/recipes?search={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Рецепты",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge",
+    logo: `${
+      process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
+    }/logo.png`,
+    description: "Кулинарный портал с лучшими рецептами для любого случая",
+  };
+
   return (
     <div className="min-h-screen">
+      {/* Структурированные данные JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+
       {/* Navigation */}
       <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

@@ -1,0 +1,38 @@
+User-Agent: *
+Disallow: *utm
+Disallow: *?
+Disallow: /admin/
+Disallow: /login/
+Disallow: /api/
+Disallow: /private/	
+Disallow: /search
+Disallow: *?q=
+Disallow: *?sort=
+Disallow: *&page=
+
+
+User-agent: Yandex
+Disallow: *?
+Disallow: *utm
+Disallow: /admin/
+Disallow: /login/
+Disallow: /api/
+Disallow: /private/
+Disallow: /search
+Clean-param: q&sort&page
+
+
+User-agent: Googlebot
+Disallow: *?
+Disallow: *utm
+Disallow: /admin/
+Disallow: /login/
+Disallow: /api/
+Disallow: /private/
+Disallow: /search
+Disallow: *?q=
+Disallow: *?sort=
+Disallow: *&page=
+
+
+Sitemap: https://retsepti.ge/sitemap.xml

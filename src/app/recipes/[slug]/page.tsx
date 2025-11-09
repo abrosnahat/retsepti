@@ -52,13 +52,55 @@ export async function generateMetadata({ params }: RecipePageProps) {
   }
 
   return {
-    title: `${recipe.title} - Рецепты`,
+    title: recipe.title,
     description:
-      recipe.description || `Рецепт ${recipe.title} с пошаговыми инструкциями`,
+      recipe.description ||
+      `${
+        recipe.title
+      } - Рецепт с пошаговыми инструкциями и фотографиями. Время приготовления: ${
+        (recipe.prepTime || 0) + (recipe.cookTime || 0)
+      } минут.`,
+    keywords: [
+      recipe.title,
+      "рецепт",
+      recipe.category.name,
+      "пошаговый рецепт",
+      "рецепт с фото",
+      "как приготовить",
+    ],
     openGraph: {
       title: recipe.title,
-      description: recipe.description || `Рецепт ${recipe.title}`,
+      description:
+        recipe.description ||
+        `Рецепт ${recipe.title} с пошаговыми инструкциями`,
+      type: "article",
+      url: `/recipes/${recipe.slug}`,
+      images: recipe.mainImage
+        ? [
+            {
+              url: recipe.mainImage,
+              width: 1200,
+              height: 630,
+              alt: recipe.title,
+            },
+          ]
+        : [],
+      publishedTime: recipe.createdAt,
+      modifiedTime: recipe.updatedAt,
+      authors: [recipe.author.name || "Рецепты"],
+      section: recipe.category.name,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: recipe.title,
+      description:
+        recipe.description ||
+        `Рецепт ${recipe.title} с пошаговыми инструкциями`,
       images: recipe.mainImage ? [recipe.mainImage] : [],
+      creator: "@recipes",
+    },
+    alternates: {
+      canonical: `/recipes/${recipe.slug}`,
     },
   };
 }
@@ -79,9 +121,89 @@ export default async function RecipePage({ params }: RecipePageProps) {
     : [];
 
   const totalTime = (recipe.prepTime || 0) + (recipe.cookTime || 0);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge";
+
+  // Структурированные данные Recipe Schema
+  const recipeSchema = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: recipe.title,
+    description: recipe.description || "",
+    image: recipe.mainImage ? [recipe.mainImage] : [],
+    author: {
+      "@type": "Person",
+      name: recipe.author.name || "Рецепты",
+    },
+    datePublished: recipe.createdAt,
+    dateModified: recipe.updatedAt,
+    prepTime: recipe.prepTime ? `PT${recipe.prepTime}M` : undefined,
+    cookTime: recipe.cookTime ? `PT${recipe.cookTime}M` : undefined,
+    totalTime: totalTime ? `PT${totalTime}M` : undefined,
+    recipeYield: recipe.servings ? `${recipe.servings} порций` : undefined,
+    recipeCategory: recipe.category.name,
+    recipeCuisine: "Русская",
+    recipeIngredient: ingredients.map(
+      (ing) => `${ing.name} - ${ing.amount} ${ing.unit}`
+    ),
+    recipeInstructions: instructions.map((inst, index) => ({
+      "@type": "HowToStep",
+      position: inst.step || index + 1,
+      text: inst.description,
+    })),
+    keywords: `${recipe.title}, рецепт, ${recipe.category.name}, пошаговый рецепт`,
+    aggregateRating: recipe.featured
+      ? {
+          "@type": "AggregateRating",
+          ratingValue: "5",
+          ratingCount: "1",
+        }
+      : undefined,
+  };
+
+  // Breadcrumb Schema
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Главная",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Рецепты",
+        item: `${baseUrl}/recipes`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: recipe.category.name,
+        item: `${baseUrl}/categories/${recipe.category.slug}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: recipe.title,
+        item: `${baseUrl}/recipes/${recipe.slug}`,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen">
+      {/* Структурированные данные JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(recipeSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Navigation */}
       <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
