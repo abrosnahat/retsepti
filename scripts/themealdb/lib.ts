@@ -256,17 +256,53 @@ export class OllamaTranslator {
     return s.split(/\n{2,}/)[0].trim() || original;
   }
 
+  /**
+   * Validate translation output:
+   *  - must contain at least one Georgian character (U+10A0..U+10FF)
+   *  - must NOT contain Hangul / CJK / Hiragana / Katakana / Hebrew / Arabic / Devanagari
+   *  - latin letter ratio must be small (translator must not return English)
+   */
+  private isValidGeorgian(out: string, original: string): boolean {
+    if (!out) return false;
+    const hasGeorgian = /[\u10A0-\u10FF]/.test(out);
+    if (!hasGeorgian) return false;
+
+    // Forbidden scripts (model hallucinations)
+    const forbidden =
+      /[\uAC00-\uD7AF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\u0590-\u05FF\u0600-\u06FF\u0900-\u097F\u0400-\u04FF]/;
+    if (forbidden.test(out)) return false;
+
+    // Latin letters should be a minor part. Allow units (g, ml, oz, tbsp, tsp, cup),
+    // but if more than ~40% of letters are latin — translation is likely incomplete.
+    const letters = out.replace(/[^A-Za-z\u10A0-\u10FF]/g, "");
+    if (letters.length > 0) {
+      const latin = (out.match(/[A-Za-z]/g) || []).length;
+      const ratio = latin / letters.length;
+      // Short inputs (likely ingredient names, units) — be stricter
+      if (original.length < 40) {
+        if (ratio > 0.3) return false;
+      } else if (ratio > 0.4) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   async translate(text: string): Promise<string> {
     if (!this.enabled) return text;
     const trimmed = text.trim();
     if (!trimmed) return text;
     await loadTranslations();
     const cached = translations.get(trimmed);
-    if (cached) return cached;
+    if (cached && this.isValidGeorgian(cached, trimmed)) return cached;
+    if (cached) {
+      // bad cached value — drop it
+      translations.delete(trimmed);
+    }
 
-    const prompt = `You are a professional culinary translator. Translate the following English cooking text into Georgian (ქართული).
+    const basePrompt = `You are a professional culinary translator. Translate the following English cooking text into Georgian (ქართული, Mkhedruli script).
 Rules:
-- Output ONLY the Georgian translation. No explanations, no quotes, no English text.
+- Output ONLY the Georgian translation in Mkhedruli script. No explanations, no quotes, no English text, no other languages.
 - Keep numbers and units of measurement (g, ml, oz, tbsp, tsp, cup, etc.) as-is.
 - Preserve the meaning and tone. Do not add or remove information.
 - If the input is a single ingredient name, output a single Georgian ingredient name.
@@ -274,19 +310,33 @@ Rules:
 English: ${trimmed}
 Georgian:`;
 
-    try {
-      const raw = await this.generate(prompt);
-      const out = this.clean(raw, trimmed);
-      if (!out) throw new Error("empty translation");
-      translations.set(trimmed, out);
-      scheduleSaveTranslations();
-      return out;
-    } catch (err) {
-      console.warn(
-        `  ⚠ translation failed (${(err as Error).message}), keeping original`
-      );
-      return trimmed;
+    const retryPrompt = `Translate to Georgian (ქართული) using ONLY Mkhedruli script (\u10A0-\u10FF). NO Korean, NO Chinese, NO Japanese, NO English. Output translation only, nothing else.
+
+Text: ${trimmed}
+ქართული:`;
+
+    for (const prompt of [basePrompt, retryPrompt]) {
+      try {
+        const raw = await this.generate(prompt);
+        const out = this.clean(raw, trimmed);
+        if (out && this.isValidGeorgian(out, trimmed)) {
+          translations.set(trimmed, out);
+          scheduleSaveTranslations();
+          return out;
+        }
+        console.warn(
+          `  ⚠ invalid translation output for "${trimmed.slice(0, 40)}…", retrying`
+        );
+      } catch (err) {
+        console.warn(
+          `  ⚠ translation error (${(err as Error).message}), retrying`
+        );
+      }
     }
+    console.warn(
+      `  ⚠ translation failed for "${trimmed.slice(0, 60)}", keeping English`
+    );
+    return trimmed;
   }
 }
 
