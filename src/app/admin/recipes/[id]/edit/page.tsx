@@ -195,14 +195,6 @@ export default function EditRecipePage() {
     }
   };
 
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9а-я]/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "");
-  };
-
   const addIngredient = () => {
     setIngredients([
       ...ingredients,
@@ -266,8 +258,6 @@ export default function EditRecipePage() {
     setError("");
 
     try {
-      const slug = generateSlug(formData.title);
-
       const response = await fetch(`/api/admin/recipes/${recipeId}/edit`, {
         method: "PUT",
         headers: {
@@ -275,7 +265,7 @@ export default function EditRecipePage() {
         },
         body: JSON.stringify({
           ...formData,
-          slug,
+          slug: recipe?.slug,
           prepTime: formData.prepTime ? parseInt(formData.prepTime) : null,
           cookTime: formData.cookTime ? parseInt(formData.cookTime) : null,
           servings: formData.servings ? parseInt(formData.servings) : null,
