@@ -9,11 +9,31 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor";
-import { ChefHat, ArrowLeft, Save, Loader2 } from "lucide-react";
+import {
+  ChefHat,
+  ArrowLeft,
+  Save,
+  Loader2,
+  Plus,
+  X,
+} from "lucide-react";
 
 interface Category {
   id: string;
   name: string;
+}
+
+interface Ingredient {
+  id: string;
+  name: string;
+  amount: string;
+  unit: string;
+}
+
+interface Instruction {
+  id: string;
+  step: number;
+  description: string;
 }
 
 interface Recipe {
@@ -22,6 +42,8 @@ interface Recipe {
   slug: string;
   description: string | null;
   content: string;
+  ingredients: string;
+  instructions: string;
   mainImage: string | null;
   prepTime: number | null;
   cookTime: number | null;
@@ -58,6 +80,13 @@ export default function EditRecipePage() {
     featured: false,
   });
 
+  const [ingredients, setIngredients] = useState<Ingredient[]>([
+    { id: "1", name: "", amount: "", unit: "" },
+  ]);
+  const [instructions, setInstructions] = useState<Instruction[]>([
+    { id: "1", step: 1, description: "" },
+  ]);
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
@@ -89,13 +118,57 @@ export default function EditRecipePage() {
         published: recipe.published,
         featured: recipe.featured,
       });
+
+      // Парсим ингредиенты
+      try {
+        const parsed = recipe.ingredients ? JSON.parse(recipe.ingredients) : [];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setIngredients(
+            parsed.map(
+              (
+                ing: { name?: string; amount?: string; unit?: string },
+                idx: number
+              ) => ({
+                id: String(idx + 1),
+                name: ing.name || "",
+                amount: ing.amount || "",
+                unit: ing.unit || "",
+              })
+            )
+          );
+        }
+      } catch (e) {
+        console.error("Error parsing ingredients:", e);
+      }
+
+      // Парсим инструкции
+      try {
+        const parsed = recipe.instructions
+          ? JSON.parse(recipe.instructions)
+          : [];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setInstructions(
+            parsed.map(
+              (
+                inst: { step?: number; description?: string },
+                idx: number
+              ) => ({
+                id: String(idx + 1),
+                step: inst.step || idx + 1,
+                description: inst.description || "",
+              })
+            )
+          );
+        }
+      } catch (e) {
+        console.error("Error parsing instructions:", e);
+      }
     }
   }, [recipe]);
 
   const fetchRecipe = async () => {
     try {
       const response = await fetch(`/api/admin/recipes/${recipeId}/edit`);
-
       if (response.ok) {
         const data = await response.json();
         setRecipe(data);
@@ -130,14 +203,61 @@ export default function EditRecipePage() {
       .replace(/^-|-$/g, "");
   };
 
+  const addIngredient = () => {
+    setIngredients([
+      ...ingredients,
+      { id: Date.now().toString(), name: "", amount: "", unit: "" },
+    ]);
+  };
+
+  const removeIngredient = (id: string) => {
+    setIngredients(ingredients.filter((ing) => ing.id !== id));
+  };
+
+  const updateIngredient = (
+    id: string,
+    field: keyof Ingredient,
+    value: string
+  ) => {
+    setIngredients(
+      ingredients.map((ing) =>
+        ing.id === id ? { ...ing, [field]: value } : ing
+      )
+    );
+  };
+
+  const addInstruction = () => {
+    setInstructions([
+      ...instructions,
+      {
+        id: Date.now().toString(),
+        step: instructions.length + 1,
+        description: "",
+      },
+    ]);
+  };
+
+  const removeInstruction = (id: string) => {
+    const filtered = instructions.filter((inst) => inst.id !== id);
+    const reordered = filtered.map((inst, index) => ({
+      ...inst,
+      step: index + 1,
+    }));
+    setInstructions(reordered);
+  };
+
+  const updateInstruction = (id: string, description: string) => {
+    setInstructions(
+      instructions.map((inst) =>
+        inst.id === id ? { ...inst, description } : inst
+      )
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      !formData.title.trim() ||
-      !formData.content.trim() ||
-      !formData.categoryId
-    ) {
+    if (!formData.title.trim() || !formData.categoryId) {
       setError("Заполните все обязательные поля");
       return;
     }
@@ -148,7 +268,7 @@ export default function EditRecipePage() {
     try {
       const slug = generateSlug(formData.title);
 
-      const response = await fetch(`/api/admin/recipes/${recipeId}`, {
+      const response = await fetch(`/api/admin/recipes/${recipeId}/edit`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -159,6 +279,12 @@ export default function EditRecipePage() {
           prepTime: formData.prepTime ? parseInt(formData.prepTime) : null,
           cookTime: formData.cookTime ? parseInt(formData.cookTime) : null,
           servings: formData.servings ? parseInt(formData.servings) : null,
+          ingredients: JSON.stringify(
+            ingredients.filter((ing) => ing.name.trim())
+          ),
+          instructions: JSON.stringify(
+            instructions.filter((inst) => inst.description.trim())
+          ),
         }),
       });
 
@@ -203,7 +329,6 @@ export default function EditRecipePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Navigation */}
       <nav className="glass fixed top-0 left-0 right-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -373,20 +498,142 @@ export default function EditRecipePage() {
               </div>
             </div>
 
-            {/* Контент рецепта */}
+            {/* Ингредиенты */}
+            <div className="glass rounded-xl p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Ингредиенты
+                </h2>
+                <Button
+                  type="button"
+                  onClick={addIngredient}
+                  variant="ghost"
+                  size="sm"
+                  className="text-green-600 hover:text-green-700"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Добавить
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {ingredients.map((ingredient) => (
+                  <div key={ingredient.id} className="flex gap-4 items-start">
+                    <div className="flex-1">
+                      <Input
+                        value={ingredient.name}
+                        onChange={(e) =>
+                          updateIngredient(
+                            ingredient.id,
+                            "name",
+                            e.target.value
+                          )
+                        }
+                        placeholder="Название ингредиента"
+                      />
+                    </div>
+                    <div className="w-24">
+                      <Input
+                        value={ingredient.amount}
+                        onChange={(e) =>
+                          updateIngredient(
+                            ingredient.id,
+                            "amount",
+                            e.target.value
+                          )
+                        }
+                        placeholder="500"
+                      />
+                    </div>
+                    <div className="w-20">
+                      <Input
+                        value={ingredient.unit}
+                        onChange={(e) =>
+                          updateIngredient(
+                            ingredient.id,
+                            "unit",
+                            e.target.value
+                          )
+                        }
+                        placeholder="г"
+                      />
+                    </div>
+                    {ingredients.length > 1 && (
+                      <Button
+                        type="button"
+                        onClick={() => removeIngredient(ingredient.id)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Инструкции */}
+            <div className="glass rounded-xl p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Пошаговые инструкции
+                </h2>
+                <Button
+                  type="button"
+                  onClick={addInstruction}
+                  variant="ghost"
+                  size="sm"
+                  className="text-green-600 hover:text-green-700"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Добавить шаг
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {instructions.map((instruction) => (
+                  <div key={instruction.id} className="flex gap-4 items-start">
+                    <div className="w-12 h-10 bg-rose-100 rounded-md flex items-center justify-center text-sm font-semibold text-rose-600">
+                      {instruction.step}
+                    </div>
+                    <div className="flex-1">
+                      <Textarea
+                        value={instruction.description}
+                        onChange={(e) =>
+                          updateInstruction(instruction.id, e.target.value)
+                        }
+                        placeholder="Описание шага..."
+                        rows={2}
+                      />
+                    </div>
+                    {instructions.length > 1 && (
+                      <Button
+                        type="button"
+                        onClick={() => removeInstruction(instruction.id)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Подробное описание */}
             <div className="glass rounded-xl p-6">
               <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                Содержание рецепта
+                Подробное описание
               </h2>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Описание, ингредиенты и инструкции *
-                </label>
-                <RichTextEditor
-                  content={formData.content}
-                  onChange={(content) => setFormData({ ...formData, content })}
-                />
-              </div>
+              <RichTextEditor
+                content={formData.content}
+                onChange={(content) => setFormData({ ...formData, content })}
+                placeholder="Добавьте подробное описание рецепта, советы по приготовлению, историю блюда и другую полезную информацию..."
+              />
             </div>
 
             {/* Настройки публикации */}
