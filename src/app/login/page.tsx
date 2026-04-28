@@ -29,17 +29,17 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError("Неверный email или пароль");
+        setError("არასწორი email ან პაროლი");
       } else {
         const session = await getSession();
         if (session?.user?.role === "admin") {
           router.push("/admin");
         } else {
-          setError("У вас нет прав администратора");
+          setError("თქვენ არ გაქვთ ადმინისტრატორის უფლებები");
         }
       }
     } catch {
-      setError("Произошла ошибка при входе");
+      setError("შესვლისას მოხდა შეცდომა");
     } finally {
       setIsLoading(false);
     }
@@ -57,14 +57,14 @@ export default function LoginPage() {
               >
                 <ChefHat className="h-8 w-8 text-rose-600" />
                 <span className="text-2xl font-bold text-gray-800">
-                  Рецепты
+                  რეცეპტები
                 </span>
               </Link>
               <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                Вход в админку
+                ადმინ პანელში შესვლა
               </h1>
               <p className="text-gray-600">
-                Введите данные для входа в панель администратора
+                შეიყვანეთ მონაცემები ადმინისტრატორის პანელში შესასვლელად
               </p>
             </div>
 
@@ -74,7 +74,7 @@ export default function LoginPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Email адрес
+                  Email მისამართი
                 </label>
                 <Input
                   id="email"
@@ -91,7 +91,7 @@ export default function LoginPage() {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Пароль
+                  პაროლი
                 </label>
                 <Input
                   id="password"
@@ -114,7 +114,7 @@ export default function LoginPage() {
                 disabled={isLoading}
                 className="w-full glass hover:bg-white/40 text-gray-800 font-semibold"
               >
-                {isLoading ? "Вход..." : "Войти"}
+                {isLoading ? "შესვლა..." : "შესვლა"}
               </Button>
             </form>
 
@@ -123,7 +123,7 @@ export default function LoginPage() {
                 href="/"
                 className="text-sm text-rose-600 hover:text-rose-700 transition-colors"
               >
-                ← Вернуться на главную
+                ← მთავარ გვერდზე დაბრუნება
               </Link>
             </div>
           </div>

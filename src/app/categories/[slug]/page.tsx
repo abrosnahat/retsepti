@@ -71,33 +71,27 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 
   if (!category) {
     return {
-      title: "Категория не найдена",
+      title: "კატეგორია ვერ მოიძებნა",
     };
   }
 
   return {
     title: category.name,
-    description: `Рецепты в категории ${
+    description: `რეცეპტები კატეგორიაში ${
       category.name
-    }. Найдите лучшие рецепты ${category.name.toLowerCase()} с пошаговыми инструкциями и фотографиями. Всего ${
+    }. იპოვეთ საუკეთესო რეცეპტები ${category.name.toLowerCase()} ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ფოტოებით. სულ ჭიხნა ${
       category.recipes.length
-    } ${
-      category.recipes.length === 1
-        ? "рецепт"
-        : category.recipes.length < 5
-        ? "рецепта"
-        : "рецептов"
-    }.`,
+    } რეცეპტი.`,
     keywords: [
       category.name,
-      "рецепты",
-      `рецепты ${category.name.toLowerCase()}`,
-      "пошаговые рецепты",
-      "рецепты с фото",
+      "რეცეპტები",
+      `რეცეპტები ${category.name.toLowerCase()}`,
+      "ნაბიჯ-ნაბიჯ რეცეპტები",
+      "რეცეპტები ფოტოებით",
     ],
     openGraph: {
-      title: `${category.name} - Рецепты`,
-      description: `Рецепты в категории ${category.name}. ${category.recipes.length} рецептов с пошаговыми инструкциями.`,
+      title: `${category.name} - რეცეპტები`,
+      description: `რეცეპტები კატეგორიაში ${category.name}. სულ ${category.recipes.length} რეცეპტი ნაბიჯ-ნაბიჯ ინსტრუქციებით.`,
       type: "website",
       url: `/categories/${category.slug}`,
       images:
@@ -107,8 +101,8 @@ export async function generateMetadata({ params }: CategoryPageProps) {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${category.name} - Рецепты`,
-      description: `Рецепты в категории ${category.name}. ${category.recipes.length} рецептов с пошаговыми инструкциями.`,
+      title: `${category.name} - რეცეპტები`,
+      description: `რეცეპტები კატეგორიაში ${category.name}. სულ ${category.recipes.length} რეცეპტი ნაბიჯ-ნაბიჯ ინსტრუქციებით.`,
     },
     alternates: {
       canonical: `/categories/${category.slug}`,
@@ -134,13 +128,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Главная",
+        name: "მთავარი",
         item: baseUrl,
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Категории",
+        name: "კატეგორიები",
         item: `${baseUrl}/categories`,
       },
       {
@@ -156,7 +150,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: category.name,
-    description: `Рецепты в категории ${category.name}`,
+    description: `რეცეპტები კატეგორიაში ${category.name}`,
     url: `${baseUrl}/categories/${category.slug}`,
     breadcrumb: {
       "@type": "BreadcrumbList",
@@ -200,7 +194,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <Link href="/categories" className="flex items-center space-x-2">
               <ArrowLeft className="h-5 w-5 text-gray-700" />
               <span className="text-gray-700 hover:text-rose-600 transition-colors">
-                Категории
+                კატეგორიები
               </span>
             </Link>
           </div>
@@ -221,13 +215,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               {category.name}
             </h1>
             <p className="text-xl text-gray-600">
-              {category.recipes.length} рецепт
-              {category.recipes.length === 1
-                ? ""
-                : category.recipes.length < 5
-                ? "а"
-                : "ов"}{" "}
-              в этой категории
+              {category.recipes.length} რეცეპტი ამ კატეგორიაში
             </p>
           </div>
 
@@ -236,17 +224,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <div className="text-center glass rounded-xl p-12">
               <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                Рецепты не найдены
+                რეცეპტები ვერ მოიძებნა
               </h3>
               <p className="text-gray-500 mb-6">
-                В этой категории пока нет опубликованных рецептов
+                ამ კატეგორიაში ჯერ გამოქვეყნებული რეცეპტები არ არის
               </p>
               <Link
                 href="/recipes"
                 className="inline-flex items-center space-x-2 glass px-6 py-3 rounded-lg hover:bg-white/40 transition-all transform hover:scale-105"
               >
                 <BookOpen className="h-5 w-5 text-rose-600" />
-                <span className="text-gray-800 font-medium">Все рецепты</span>
+                <span className="text-gray-800 font-medium">ყველა რეცეპტი</span>
               </Link>
             </div>
           ) : (
@@ -264,14 +252,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               className="inline-flex items-center space-x-2 glass px-6 py-3 rounded-lg hover:bg-white/40 transition-all transform hover:scale-105"
             >
               <ArrowLeft className="h-5 w-5 text-rose-600" />
-              <span className="text-gray-800 font-medium">Все категории</span>
+              <span className="text-gray-800 font-medium">ყველა კატეგორია</span>
             </Link>
             <Link
               href="/recipes"
               className="inline-flex items-center space-x-2 glass px-6 py-3 rounded-lg hover:bg-white/40 transition-all transform hover:scale-105"
             >
               <BookOpen className="h-5 w-5 text-rose-600" />
-              <span className="text-gray-800 font-medium">Все рецепты</span>
+              <span className="text-gray-800 font-medium">ყველა რეცეპტი</span>
             </Link>
           </div>
         </div>

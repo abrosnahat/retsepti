@@ -244,7 +244,7 @@ export default function AdminRecipesPage() {
 
               {recipes.map((recipe) => (
                 <div key={recipe.id} className="glass rounded-xl p-6">
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center space-x-4 mb-4">
                         {recipe.mainImage && (
@@ -286,14 +286,6 @@ export default function AdminRecipesPage() {
                             <span className="font-medium">
                               {recipe.category.name}
                             </span>
-                            {recipe.author.name && (
-                              <>
-                                {" • Автор: "}
-                                <span className="font-medium">
-                                  {recipe.author.name}
-                                </span>
-                              </>
-                            )}
                           </div>
                           {recipe.description && (
                             <p className="text-gray-600 text-sm mb-3 line-clamp-2">
@@ -326,23 +318,25 @@ export default function AdminRecipesPage() {
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-2 ml-4">
+                    <div className="flex flex-wrap items-center gap-2 lg:ml-4">
                       <Link href={`/recipes/${recipe.slug}`} target="_blank">
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-blue-600 hover:text-blue-700"
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                         >
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4 mr-1.5" />
+                          Просмотр
                         </Button>
                       </Link>
                       <Link href={`/admin/recipes/${recipe.id}/edit`}>
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-gray-600 hover:text-gray-700"
+                          className="text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                         >
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-4 w-4 mr-1.5" />
+                          Редактировать
                         </Button>
                       </Link>
                       <Button
@@ -353,14 +347,20 @@ export default function AdminRecipesPage() {
                         }
                         className={
                           recipe.published
-                            ? "text-green-600 hover:text-green-700"
-                            : "text-gray-600 hover:text-gray-700"
+                            ? "text-green-700 hover:text-green-800 hover:bg-green-50"
+                            : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                         }
                       >
                         {recipe.published ? (
-                          <Eye className="h-4 w-4" />
+                          <>
+                            <EyeOff className="h-4 w-4 mr-1.5" />
+                            Снять с публикации
+                          </>
                         ) : (
-                          <EyeOff className="h-4 w-4" />
+                          <>
+                            <Eye className="h-4 w-4 mr-1.5" />
+                            Опубликовать
+                          </>
                         )}
                       </Button>
                       <Button
@@ -371,23 +371,30 @@ export default function AdminRecipesPage() {
                         }
                         className={
                           recipe.featured
-                            ? "text-yellow-600 hover:text-yellow-700"
-                            : "text-gray-600 hover:text-gray-700"
+                            ? "text-yellow-700 hover:text-yellow-800 hover:bg-yellow-50"
+                            : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
                         }
                       >
                         {recipe.featured ? (
-                          <Star className="h-4 w-4" />
+                          <>
+                            <StarOff className="h-4 w-4 mr-1.5" />
+                            Убрать из рекомендуемых
+                          </>
                         ) : (
-                          <StarOff className="h-4 w-4" />
+                          <>
+                            <Star className="h-4 w-4 mr-1.5" />
+                            В рекомендуемые
+                          </>
                         )}
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteRecipe(recipe.id)}
-                        className="text-red-600 hover:text-red-700"
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 mr-1.5" />
+                        Удалить
                       </Button>
                     </div>
                   </div>

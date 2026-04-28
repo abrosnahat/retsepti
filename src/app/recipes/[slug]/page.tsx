@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: RecipePageProps) {
 
   if (!recipe) {
     return {
-      title: "Рецепт не найден",
+      title: "რეცეპტი ვერ მოიძებნა",
     };
   }
 
@@ -62,22 +62,22 @@ export async function generateMetadata({ params }: RecipePageProps) {
       recipe.description ||
       `${
         recipe.title
-      } - Рецепт с пошаговыми инструкциями и фотографиями. Время приготовления: ${
+      } - რეცეპტი ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ფოტოებით. მომზადების დრო: ${
         (recipe.prepTime || 0) + (recipe.cookTime || 0)
-      } минут.`,
+      } წუთი.`,
     keywords: [
       recipe.title,
-      "рецепт",
+      "რეცეპტი",
       recipe.category.name,
-      "пошаговый рецепт",
-      "рецепт с фото",
-      "как приготовить",
+      "ნაბიჯ-ნაბიჯ რეცეპტი",
+      "რეცეპტი ფოტოთან",
+      "როგორ მოვამზადოთ",
     ],
     openGraph: {
       title: recipe.title,
       description:
         recipe.description ||
-        `Рецепт ${recipe.title} с пошаговыми инструкциями`,
+        `რეცეპტი ${recipe.title} ნაბიჯ-ნაბიჯ ინსტრუქციებით`,
       type: "article",
       url: `/recipes/${recipe.slug}`,
       images: recipe.mainImage
@@ -92,7 +92,7 @@ export async function generateMetadata({ params }: RecipePageProps) {
         : [],
       publishedTime: recipe.createdAt,
       modifiedTime: recipe.updatedAt,
-      authors: [recipe.author.name || "Рецепты"],
+      authors: [recipe.author.name || "რეცეპტები"],
       section: recipe.category.name,
     },
     twitter: {
@@ -100,7 +100,7 @@ export async function generateMetadata({ params }: RecipePageProps) {
       title: recipe.title,
       description:
         recipe.description ||
-        `Рецепт ${recipe.title} с пошаговыми инструкциями`,
+        `რეცეპტი ${recipe.title} ნაბიჯ-ნაბიჯ ინსტრუქციებით`,
       images: recipe.mainImage ? [recipe.mainImage] : [],
       creator: "@recipes",
     },
@@ -137,16 +137,16 @@ export default async function RecipePage({ params }: RecipePageProps) {
     image: recipe.mainImage ? [recipe.mainImage] : [],
     author: {
       "@type": "Person",
-      name: recipe.author.name || "Рецепты",
+      name: recipe.author.name || "რეცეპტები",
     },
     datePublished: recipe.createdAt,
     dateModified: recipe.updatedAt,
     prepTime: recipe.prepTime ? `PT${recipe.prepTime}M` : undefined,
     cookTime: recipe.cookTime ? `PT${recipe.cookTime}M` : undefined,
     totalTime: totalTime ? `PT${totalTime}M` : undefined,
-    recipeYield: recipe.servings ? `${recipe.servings} порций` : undefined,
+    recipeYield: recipe.servings ? `${recipe.servings} ულუფა` : undefined,
     recipeCategory: recipe.category.name,
-    recipeCuisine: "Русская",
+    recipeCuisine: "ქართული",
     recipeIngredient: ingredients.map(
       (ing) => `${ing.name} - ${ing.amount} ${ing.unit}`
     ),
@@ -155,7 +155,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
       position: inst.step || index + 1,
       text: inst.description,
     })),
-    keywords: `${recipe.title}, рецепт, ${recipe.category.name}, пошаговый рецепт`,
+    keywords: `${recipe.title}, რეცეპტი, ${recipe.category.name}, ნაბიჯ-ნაბიჯ რეცეპტი`,
     aggregateRating: recipe.featured
       ? {
           "@type": "AggregateRating",
@@ -173,13 +173,13 @@ export default async function RecipePage({ params }: RecipePageProps) {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Главная",
+        name: "მთავარი",
         item: baseUrl,
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Рецепты",
+        name: "რეცეპტები",
         item: `${baseUrl}/recipes`,
       },
       {
@@ -214,14 +214,14 @@ export default async function RecipePage({ params }: RecipePageProps) {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <ChefHat className="h-8 w-8 text-rose-600" />
-            <span className="text-2xl font-bold text-gray-800">Рецепты</span>
+            <span className="text-2xl font-bold text-gray-800">რეცეპტები</span>
           </Link>
           <Link
             href="/"
             className="flex items-center space-x-2 text-gray-700 hover:text-rose-600 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>На главную</span>
+            <span>მთავარზე</span>
           </Link>
         </div>
       </nav>
@@ -267,19 +267,15 @@ export default async function RecipePage({ params }: RecipePageProps) {
                     {totalTime > 0 && (
                       <div className="flex items-center">
                         <Clock className="h-4 w-4 mr-2" />
-                        <span>Общее время: {totalTime} мин</span>
+                        <span>სრული დრო: {totalTime} წთ</span>
                       </div>
                     )}
                     {recipe.servings && (
                       <div className="flex items-center">
                         <Users className="h-4 w-4 mr-2" />
-                        <span>Порций: {recipe.servings}</span>
+                        <span>ულუფა: {recipe.servings}</span>
                       </div>
                     )}
-                    <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      <span>Автор: {recipe.author.name}</span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -295,7 +291,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
               {(recipe.prepTime || recipe.cookTime) && (
                 <div className="glass rounded-xl p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                    Время приготовления
+                    მომზადების დრო
                   </h2>
                   <div className="grid grid-cols-2 gap-4">
                     {recipe.prepTime && (
@@ -303,7 +299,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
                         <div className="text-3xl font-bold text-rose-600">
                           {recipe.prepTime}
                         </div>
-                        <div className="text-gray-600">мин подготовки</div>
+                        <div className="text-gray-600">წთ მომზადება</div>
                       </div>
                     )}
                     {recipe.cookTime && (
@@ -311,7 +307,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
                         <div className="text-3xl font-bold text-rose-600">
                           {recipe.cookTime}
                         </div>
-                        <div className="text-gray-600">мин готовки</div>
+                        <div className="text-gray-600">წთ მზადება</div>
                       </div>
                     )}
                   </div>
@@ -322,7 +318,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
               {instructions.length > 0 && (
                 <div className="glass rounded-xl p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                    Пошаговые инструкции
+                    ნაბიჯ-ნაბიჯ ინსტრუქცია
                   </h2>
                   <div className="space-y-6">
                     {instructions.map(
@@ -347,7 +343,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
               {recipe.content && (
                 <div className="glass rounded-xl p-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                    Подробное описание
+                    დეტალური აწერა
                   </h2>
                   <div
                     className="prose prose-lg max-w-none text-gray-700"
@@ -362,35 +358,31 @@ export default async function RecipePage({ params }: RecipePageProps) {
               {/* Recipe Info */}
               <div className="glass rounded-xl p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                  Информация о рецепте
+                  ინფორმაცია რეცეპტის შესახებ
                 </h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Категория:</span>
+                    <span className="text-gray-600">კატეგორია:</span>
                     <span className="text-gray-800">
                       {recipe.category.name}
                     </span>
                   </div>
                   {recipe.difficulty && (
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Сложность:</span>
+                      <span className="text-gray-600">სირთულე:</span>
                       <span className="text-gray-800">
-                        {recipe.difficulty === "easy" && "Легко"}
-                        {recipe.difficulty === "medium" && "Средне"}
-                        {recipe.difficulty === "hard" && "Сложно"}
+                        {recipe.difficulty === "easy" && "მარტივი"}
+                        {recipe.difficulty === "medium" && "საშუალო"}
+                        {recipe.difficulty === "hard" && "რთული"}
                       </span>
                     </div>
                   )}
                   {recipe.servings && (
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Порций:</span>
+                      <span className="text-gray-600">ულუფა:</span>
                       <span className="text-gray-800">{recipe.servings}</span>
                     </div>
                   )}
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Автор:</span>
-                    <span className="text-gray-800">{recipe.author.name}</span>
-                  </div>
                 </div>
               </div>
 
@@ -398,7 +390,7 @@ export default async function RecipePage({ params }: RecipePageProps) {
               {ingredients.length > 0 && (
                 <div className="glass rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                    Ингредиенты
+                    ინგრედიენტები
                   </h3>
                   <ul className="space-y-2">
                     {ingredients.map(

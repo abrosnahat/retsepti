@@ -10,28 +10,28 @@ export default function Footer() {
     <footer className="glass mt-auto border-t border-white/20">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* О сайте */}
+          {/* About */}
           <div className="space-y-4">
             <Link href="/" className="inline-flex items-center space-x-2">
               <ChefHat className="h-6 w-6 text-rose-600" />
-              <span className="text-xl font-bold text-gray-800">Рецепты</span>
+              <span className="text-xl font-bold text-gray-800">რეცეპტები</span>
             </Link>
             <p className="text-sm text-gray-600">
-              Коллекция лучших кулинарных рецептов со всего мира. Готовьте с
-              удовольствием!
+              მსოფლიოს საუკეთესო კულინარიული რეცეპტების კოლექცია. მოამზადეთ
+              სიამოვნებით!
             </p>
           </div>
 
-          {/* Навигация */}
+          {/* Navigation */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-gray-800">Навигация</h3>
+            <h3 className="font-semibold text-gray-800">ნავიგაცია</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/"
                   className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
                 >
-                  Главная
+                  მთავარი
                 </Link>
               </li>
               <li>
@@ -39,7 +39,7 @@ export default function Footer() {
                   href="/recipes"
                   className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
                 >
-                  Все рецепты
+                  ყველა რეცეპტი
                 </Link>
               </li>
               <li>
@@ -47,16 +47,16 @@ export default function Footer() {
                   href="/categories"
                   className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
                 >
-                  Категории
+                  კატეგორიები
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Категории */}
+          {/* Categories */}
           <div className="space-y-4">
             <h3 className="font-semibold text-gray-800">
-              Популярные категории
+              პოპულარული კატეგორიები
             </h3>
             <ul className="space-y-2">
               <li>
@@ -64,7 +64,7 @@ export default function Footer() {
                   href="/categories/zavtraki"
                   className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
                 >
-                  Завтраки
+                  საუზმეები
                 </Link>
               </li>
               <li>
@@ -72,7 +72,7 @@ export default function Footer() {
                   href="/categories/obedy"
                   className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
                 >
-                  Обеды
+                  სადილები
                 </Link>
               </li>
               <li>
@@ -80,15 +80,15 @@ export default function Footer() {
                   href="/categories/deserty"
                   className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
                 >
-                  Десерты
+                  დესერტები
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Контакты */}
+          {/* Contacts */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-gray-800">Контакты</h3>
+            <h3 className="font-semibold text-gray-800">კონტაქტები</h3>
             <div className="space-y-3">
               <a
                 href="mailto:info@recipes.com"
@@ -105,12 +105,12 @@ export default function Footer() {
         <div className="mt-8 pt-8 border-t border-white/20">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-gray-600">
-              © {currentYear} Рецепты. Все права защищены.
+              © {currentYear} რეცეპტები. ყველა უფლება დაცულია.
             </p>
             <p className="flex items-center space-x-1 text-sm text-gray-600">
-              <span>Сделано с</span>
+              <span>გაკეთებულია</span>
               <Heart className="h-4 w-4 text-rose-600 fill-rose-600" />
-              <span>для любителей готовить</span>
+              <span>მზარეულობის მოყვარულთათვის</span>
             </p>
           </div>
         </div>

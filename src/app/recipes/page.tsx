@@ -30,29 +30,29 @@ async function getAllRecipes() {
 }
 
 export const metadata: Metadata = {
-  title: "Все рецепты",
+  title: "ყველა რეცეპტი",
   description:
-    "Полный каталог всех рецептов с пошаговыми инструкциями. Выберите рецепт для завтрака, обеда, ужина или десерта. Простые и вкусные рецепты на любой вкус.",
+    "ყველა რეცეპტის სრული კატალოგი ნაბიჯ-ნაბიჯ ინსტრუქციებით. აირჩიეთ რეცეპტი საუზმისთვის, სადილისთვის, ვახშმისა თუ დესერტისთვის. მარტივი და გემრიელი რეცეპტები ნებისმიერ გემოვნებაზე.",
   keywords: [
-    "все рецепты",
-    "каталог рецептов",
-    "рецепты с фото",
-    "пошаговые рецепты",
-    "домашняя кухня",
-    "простые рецепты",
+    "ყველა რეცეპტი",
+    "რეცეპტების კატალოგი",
+    "რეცეპტები ფოტოებით",
+    "ნაბიჯ-ნაბიჯ რეცეპტები",
+    "საშინაო სამზარეულო",
+    "მარტივი რეცეპტები",
   ],
   openGraph: {
-    title: "Все рецепты - Полный каталог",
+    title: "ყველა რეცეპტი - სრული კატალოგი",
     description:
-      "Полный каталог всех рецептов с пошаговыми инструкциями и фотографиями",
+      "ყველა რეცეპტის სრული კატალოგი ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ფოტოებით",
     type: "website",
     url: "/recipes",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Все рецепты - Полный каталог",
+    title: "ყველა რეცეპტი - სრული კატალოგი",
     description:
-      "Полный каталог всех рецептов с пошаговыми инструкциями и фотографиями",
+      "ყველა რეცეპტის სრული კატალოგი ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ფოტოებით",
   },
   alternates: {
     canonical: "/recipes",
@@ -94,14 +94,14 @@ export default async function RecipesPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <ChefHat className="h-8 w-8 text-rose-600" />
-            <span className="text-2xl font-bold text-gray-800">Рецепты</span>
+            <span className="text-2xl font-bold text-gray-800">რეცეპტები</span>
           </Link>
           <Link
             href="/"
             className="flex items-center space-x-2 text-gray-700 hover:text-rose-600 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>На главную</span>
+            <span>მთავარზე</span>
           </Link>
         </div>
       </nav>
@@ -110,10 +110,10 @@ export default async function RecipesPage() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              Все рецепты
+              ყველა რეცეპტი
             </h1>
             <p className="text-xl text-gray-600">
-              Полный каталог наших кулинарных шедевров
+              ჩვენი კულინარიული შედევრების სრული კატალოგი
             </p>
           </div>
 
@@ -121,17 +121,17 @@ export default async function RecipesPage() {
             <div className="text-center glass rounded-xl p-12">
               <ChefHat className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                Рецепты скоро появятся
+                რეცეპტები მალე გამოჭნდება
               </h3>
               <p className="text-gray-500">
-                Мы работаем над добавлением вкусных рецептов для вас
+                ჩვენ ვმუშაობთ თქვენთვის გემრიელი რეცეპტების დამატებაზე
               </p>
             </div>
           ) : (
             <>
               <div className="mb-6">
                 <p className="text-gray-600">
-                  Найдено рецептов:{" "}
+                  ნაპოვნია რეცეპტი:{" "}
                   <span className="font-semibold">{recipes.length}</span>
                 </p>
               </div>

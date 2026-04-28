@@ -31,19 +31,19 @@ export function RecipeCard({ recipe, showCategory = false }: RecipeCardProps) {
   const getDifficultyText = (difficulty: string | null) => {
     switch (difficulty) {
       case "easy":
-        return "Легко";
+        return "მარტივი";
       case "medium":
-        return "Средне";
+        return "საშუალო";
       case "hard":
-        return "Сложно";
+        return "რთული";
       default:
-        return "Не указано";
+        return "მითითებული არ არის";
     }
   };
 
   const getTotalTime = (prepTime: number | null, cookTime: number | null) => {
     const total = (prepTime || 0) + (cookTime || 0);
-    return total > 0 ? `${total} мин` : "Не указано";
+    return total > 0 ? `${total} წთ` : "მითითებული არ არის";
   };
 
   return (
@@ -100,22 +100,15 @@ export function RecipeCard({ recipe, showCategory = false }: RecipeCardProps) {
             )}
           </div>
 
-          {/* Category and Author */}
-          <div className="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center text-xs text-gray-500">
-            {showCategory && recipe.category && (
+          {/* Category */}
+          {showCategory && recipe.category && (
+            <div className="mt-4 pt-4 border-t border-gray-200 flex items-center text-xs text-gray-500">
               <CategoryLink
                 categorySlug={recipe.category.slug}
                 categoryName={recipe.category.name}
               />
-            )}
-            {recipe.author.name && (
-              <span
-                className={showCategory && recipe.category ? "" : "ml-auto"}
-              >
-                Автор: {recipe.author.name}
-              </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </Link>

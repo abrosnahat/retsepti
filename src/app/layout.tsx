@@ -14,24 +14,24 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
   ),
   title: {
-    default: "Рецепты - Кулинарные шедевры",
-    template: "%s | Рецепты",
+    default: "რეცეპტები - კულინარიული შედევრები",
+    template: "%s | რეცეპტები",
   },
   description:
-    "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями. Найдите идеальный рецепт для любого случая.",
+    "საუკეთესო რეცეპტები ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ლამაზი ფოტოებით. იპოვეთ იდეალური რეცეპტი ნებისმიერი შემთხვევისთვის.",
   keywords: [
-    "рецепты",
-    "кулинария",
-    "готовка",
-    "еда",
-    "кухня",
-    "пошаговые рецепты",
-    "рецепты с фото",
-    "домашняя кухня",
+    "რეცეპტები",
+    "კულინარია",
+    "მზარეულობა",
+    "საჭმელი",
+    "სამზარეულო",
+    "ნაბიჯ-ნაბიჯ რეცეპტები",
+    "რეცეპტები ფოტოებით",
+    "საშინაო სამზარეულო",
   ],
-  authors: [{ name: "Рецепты" }],
-  creator: "Рецепты",
-  publisher: "Рецепты",
+  authors: [{ name: "რეცეპტები" }],
+  creator: "რეცეპტები",
+  publisher: "რეცეპტები",
   formatDetection: {
     email: false,
     address: false,
@@ -39,18 +39,18 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "ru_RU",
+    locale: "ka_GE",
     url: "/",
-    siteName: "Рецепты",
-    title: "Рецепты - Кулинарные шедевры",
+    siteName: "რეცეპტები",
+    title: "რეცეპტები - კულინარიული შედევრები",
     description:
-      "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями. Найдите идеальный рецепт для любого случая.",
+      "საუკეთესო რეცეპტები ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ლამაზი ფოტოებით. იპოვეთ იდეალური რეცეპტი ნებისმიერი შემთხვევისთვის.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Рецепты - Кулинарные шедевры",
+    title: "რეცეპტები - კულინარიული შედევრები",
     description:
-      "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями.",
+      "საუკეთესო რეცეპტები ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ლამაზი ფოტოებით.",
     creator: "@recipes",
   },
   robots: {
@@ -78,7 +78,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="ru">
+    <html lang="ka">
       <body className={`${inter.className} antialiased min-h-screen`}>
         <div className="fixed inset-0 bg-gradient-to-br from-rose-100 via-blue-50 to-purple-100 -z-10" />
         <SessionProvider session={session}>{children}</SessionProvider>

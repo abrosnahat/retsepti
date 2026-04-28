@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "create-admin": "npx tsx scripts/create-admin.ts",
+    "import:themealdb": "npx tsx scripts/import-themealdb.ts",
+    "sync:themealdb": "npx tsx scripts/sync-themealdb.ts",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",

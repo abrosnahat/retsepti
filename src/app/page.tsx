@@ -6,31 +6,31 @@ import Footer from "@/components/footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Рецепты - Кулинарные шедевры",
+  title: "რეცეპტები - კულინარიული შედევრები",
   description:
-    "Откройте для себя мир восхитительных рецептов с пошаговыми инструкциями и красивыми фотографиями. Найдите идеальный рецепт для завтрака, обеда, ужина и десерта.",
+    "აღმოაცინეთ და გადახედეთ უგემრიელესი რეცეპტების სამყარო ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ლამაზი ფოტოებით. იპოვეთ იდეალურ რეცეპტს საუზმისთვის, სადილისთვის, ვახშმისა და დესერტისთვის.",
   keywords: [
-    "рецепты",
-    "кулинария",
-    "готовка",
-    "домашняя еда",
-    "пошаговые рецепты",
-    "рецепты с фото",
-    "простые рецепты",
-    "вкусные рецепты",
+    "რეცეპტები",
+    "კულინარია",
+    "მზარეულობა",
+    "სახლის სამზარეულო",
+    "ნაბიჯ-ნაბიჯ რეცეპტები",
+    "რეცეპტები ფოტოებით",
+    "მარტივი რეცეპტები",
+    "გემრიელი რეცეპტები",
   ],
   openGraph: {
-    title: "Рецепты - Кулинарные шедевры",
+    title: "რეცეპტები - კულინარიული შედევრები",
     description:
-      "Откройте для себя мир восхитительных рецептов с пошаговыми инструкциями и красивыми фотографиями.",
+      "აღმოაცინეთ და გადახედეთ უგემრიელესი რეცეპტების სამყარო ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ლამაზი ფოტოებით.",
     type: "website",
     url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Рецепты - Кулинарные шедевры",
+    title: "რეცეპტები - კულინარიული შედევრები",
     description:
-      "Откройте для себя мир восхитительных рецептов с пошаговыми инструкциями и красивыми фотографиями.",
+      "აღმოაცინეთ და გადახედეთ უგემრიელესი რეცეპტების სამყარო ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ლამაზი ფოტოებით.",
   },
   alternates: {
     canonical: "/",
@@ -95,9 +95,9 @@ export default async function Home() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Рецепты",
+    name: "რეცეპტები",
     description:
-      "Лучшие рецепты с пошаговыми инструкциями и красивыми фотографиями",
+      "საუკეთესო რეცეპტები ნაბიჯ-ნაბიჯ ინსტრუქციებითა და ლამაზი ფოტოებით",
     url: process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge",
     potentialAction: {
       "@type": "SearchAction",
@@ -114,12 +114,12 @@ export default async function Home() {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Рецепты",
+    name: "რეცეპტები",
     url: process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge",
     logo: `${
       process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
     }/logo.png`,
-    description: "Кулинарный портал с лучшими рецептами для любого случая",
+    description: "კულინარიული პორტალი საუკეთესო რეცეპტებით ნებისმიერი შემთხვევისთვის",
   };
 
   return (
@@ -139,26 +139,26 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <ChefHat className="h-8 w-8 text-rose-600" />
-            <span className="text-2xl font-bold text-gray-800">Рецепты</span>
+            <span className="text-2xl font-bold text-gray-800">რეცეპტები</span>
           </Link>
           <div className="hidden md:flex items-center space-x-6">
             <Link
               href="/recipes"
               className="text-gray-700 hover:text-rose-600 transition-colors"
             >
-              Все рецепты
+              ყველა რეცეპტი
             </Link>
             <Link
               href="/categories"
               className="text-gray-700 hover:text-rose-600 transition-colors"
             >
-              Категории
+              კატეგორიები
             </Link>
             <Link
               href="/admin"
               className="glass px-4 py-2 rounded-lg text-gray-700 hover:bg-white/30 transition-colors"
             >
-              Админка
+              ადმინი
             </Link>
           </div>
         </div>
@@ -168,18 +168,18 @@ export default async function Home() {
       <section className="pt-20 pb-12 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-            Кулинарные
-            <span className="block text-rose-600">Шедевры</span>
+            კულინარიული
+            <span className="block text-rose-600">შედევრები</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Откройте для себя мир восхитительных рецептов с пошаговыми
-            инструкциями и красивыми фотографиями
+            აღმოაცინეთ და გადახედეთ უგემრიელესი რეცეპტების სამყარო ნაბიჯ-ნაბიჯ
+            ინსტრუქციებითა და ლამაზი ფოტოებით
           </p>
           <Link
             href="/recipes"
             className="inline-block glass px-8 py-4 text-lg font-semibold text-gray-800 rounded-xl hover:bg-white/40 transition-all transform hover:scale-105"
           >
-            Смотреть рецепты
+            რეცეპტების ნახვა
           </Link>
         </div>
       </section>
@@ -189,14 +189,14 @@ export default async function Home() {
         <section className="py-12 px-6">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-              Рекомендуемые рецепты
+              რეკომენდებული რეცეპტები
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               {featuredRecipes.map((recipe) => (
                 <div key={recipe.id} className="relative">
                   <div className="absolute top-4 left-4 z-10 flex items-center text-sm text-rose-600 bg-white/90 px-2 py-1 rounded-full">
                     <Star className="h-4 w-4 mr-1" />
-                    Рекомендуем
+                    რეკომენდირებული
                   </div>
                   <RecipeCard recipe={recipe} showCategory />
                 </div>
@@ -210,16 +210,16 @@ export default async function Home() {
       <section className="py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-            Последние рецепты
+            ბოლო რეცეპტები
           </h2>
           {latestRecipes.length === 0 ? (
             <div className="text-center glass rounded-xl p-12">
               <ChefHat className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                Рецепты скоро появятся
+                რეცეპტები მალე გამოჭნდება
               </h3>
               <p className="text-gray-500">
-                Мы работаем над добавлением вкусных рецептов для вас
+                ჩვენ ვმუშაობთ თქვენთვის გემრიელი რეცეპტების დამატებაზე
               </p>
             </div>
           ) : (

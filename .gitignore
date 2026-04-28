@@ -45,5 +45,8 @@ next-env.d.ts
 prisma/*.db
 prisma/*.db-journal
 
+# themealdb sync cache
+.cache/
+
 # security documentation (contains sensitive information)
 SECURITY.md

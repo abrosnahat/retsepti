@@ -38,31 +38,31 @@ async function getCategories(): Promise<Category[]> {
 }
 
 export const metadata: Metadata = {
-  title: "Категории рецептов",
+  title: "რეცეპტების კატეგორიები",
   description:
-    "Все категории рецептов. Найдите рецепты по интересующей вас категории: завтраки, обеды, ужины, десерты, выпечка, салаты и многое другое.",
+    "რეცეპტების ყველა კატეგორია. იპოვეთ რეცეპტები თქვენთვის საინტერესო კატეგორიიდან: საუზმე, სადილი, ვახშამი, დესერტები, ცომედო, სალათები და ბევრი სხვა.",
   keywords: [
-    "категории рецептов",
-    "рецепты по категориям",
-    "завтраки",
-    "обеды",
-    "ужины",
-    "десерты",
-    "выпечка",
-    "салаты",
+    "რეცეპტების კატეგორიები",
+    "რეცეპტები კატეგორიების მიხედვით",
+    "საუზმეები",
+    "სადილები",
+    "ვახშმები",
+    "დესერტები",
+    "ცომედო",
+    "სალათები",
   ],
   openGraph: {
-    title: "Категории рецептов",
+    title: "რეცეპტების კატეგორიები",
     description:
-      "Все категории рецептов. Найдите рецепты по интересующей вас категории.",
+      "რეცეპტების ყველა კატეგორია. იპოვეთ რეცეპტები თქვენთვის საინტერესო კატეგორიიდან.",
     type: "website",
     url: "/categories",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Категории рецептов",
+    title: "რეცეპტების კატეგორიები",
     description:
-      "Все категории рецептов. Найдите рецепты по интересующей вас категории.",
+      "რეცეპტების ყველა კატეგორია. იპოვეთ რეცეპტები თქვენთვის საინტერესო კატეგორიიდან.",
   },
   alternates: {
     canonical: "/categories",
@@ -80,13 +80,13 @@ export default async function CategoriesPage() {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Главная",
+        name: "მთავარი",
         item: process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge",
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Категории",
+        name: "კატეგორიები",
         item: `${
           process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
         }/categories`,
@@ -97,9 +97,9 @@ export default async function CategoriesPage() {
   const collectionPageSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Категории рецептов",
+    name: "რეცეპტების კატეგორიები",
     description:
-      "Все категории рецептов. Найдите рецепты по интересующей вас категории.",
+      "რეცეპტების ყველა კატეგორია. იპოვეთ რეცეპტები თქვენთვის საინტერესო კატეგორიიდან.",
     url: `${
       process.env.NEXT_PUBLIC_BASE_URL || "http://retsepti.ge"
     }/categories`,
@@ -125,12 +125,12 @@ export default async function CategoriesPage() {
           <Link href="/" className="flex items-center space-x-2">
             <ArrowLeft className="h-5 w-5 text-gray-700" />
             <span className="text-gray-700 hover:text-rose-600 transition-colors">
-              На главную
+              მთავარზე
             </span>
           </Link>
           <div className="flex items-center space-x-2">
             <ChefHat className="h-6 w-6 text-rose-600" />
-            <span className="text-lg font-bold text-gray-800">Категории</span>
+            <span className="text-lg font-bold text-gray-800">კატეგორიები</span>
           </div>
         </div>
       </nav>
@@ -140,10 +140,10 @@ export default async function CategoriesPage() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Категории рецептов
+              რეცეპტების კატეგორიები
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Выберите интересующую вас категорию и найдите идеальный рецепт
+              აირჩიეთ თქვენთვის საინტერესო კატეგორია და იპოვეთ იდეალური რეცეპტი
             </p>
           </div>
 
@@ -152,9 +152,9 @@ export default async function CategoriesPage() {
             <div className="text-center glass rounded-xl p-12">
               <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                Категории не найдены
+                კატეგორიები ვერ მოიძებნა
               </h3>
-              <p className="text-gray-500">Пока что категории не созданы</p>
+              <p className="text-gray-500">ჯერჯერობით კატეგორიები შექმნილი არ არის</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -178,13 +178,7 @@ export default async function CategoriesPage() {
 
                       {/* Recipe Count */}
                       <p className="text-sm text-gray-600">
-                        {category._count?.recipes || 0} рецепт
-                        {category._count?.recipes === 1
-                          ? ""
-                          : category._count?.recipes &&
-                            category._count.recipes < 5
-                          ? "а"
-                          : "ов"}
+                        {category._count?.recipes || 0} რეცეპტი
                       </p>
                     </div>
                   </div>
@@ -200,7 +194,7 @@ export default async function CategoriesPage() {
               className="inline-flex items-center space-x-2 glass px-6 py-3 rounded-lg hover:bg-white/40 transition-all transform hover:scale-105"
             >
               <BookOpen className="h-5 w-5 text-rose-600" />
-              <span className="text-gray-800 font-medium">Все рецепты</span>
+              <span className="text-gray-800 font-medium">ყველა რეცეპტი</span>
             </Link>
           </div>
         </div>
