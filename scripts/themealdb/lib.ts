@@ -416,15 +416,6 @@ export async function importMeal(
 
   const contentHtml = [
     descriptionKa ? `<p><em>${escapeHtml(descriptionKa)}</em></p>` : "",
-    stepsKa.length
-      ? `<ol>${stepsKa
-          .map((s) => `<li>${escapeHtml(s.description)}</li>`)
-          .join("")}</ol>`
-      : "",
-    meal.strYoutube
-      ? `<p><a href="${meal.strYoutube}" target="_blank" rel="noopener">YouTube</a></p>`
-      : "",
-    `<p><small>Source: TheMealDB · id ${meal.idMeal}</small></p>`,
   ]
     .filter(Boolean)
     .join("\n");
@@ -438,6 +429,7 @@ export async function importMeal(
       ingredients: JSON.stringify(ingredientsKa),
       instructions: JSON.stringify(stepsKa),
       mainImage: meal.strMealThumb,
+      videoUrl: meal.strYoutube || null,
       published: false,
       featured: false,
       categoryId: category.id,

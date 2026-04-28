@@ -82,6 +82,7 @@ model Recipe {
   servings     Int?
   difficulty   String?  // easy, medium, hard
   mainImage    String?  // URL to main recipe image
+  videoUrl     String?  // YouTube video URL
   published    Boolean  @default(false)
   featured     Boolean  @default(false)
   categoryId   String

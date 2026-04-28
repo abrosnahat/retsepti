@@ -239,3 +239,22 @@ src/
 ## Лицензия
 
 MIT License
+
+## Импорт рецептов из TheMealDB
+
+```bash
+# 5 случайных рецептов (по умолчанию)
+npm run import:themealdb
+
+# 10 случайных рецептов
+npm run import:themealdb -- --count=10
+
+# Все из категории Beef (макс. 5)
+npm run import:themealdb -- --category=Beef --count=5
+
+# Все рецепты на букву "a"
+npm run import:themealdb -- --letter=a
+
+# Без перевода (быстрее, для теста)
+npm run import:themealdb -- --no-translate --count=3
+```

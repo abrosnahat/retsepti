@@ -22,6 +22,29 @@ interface RecipePageProps {
   }>;
 }
 
+function getYouTubeEmbedUrl(url: string): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url.trim());
+    let id: string | null = null;
+    if (u.hostname.includes("youtu.be")) {
+      id = u.pathname.slice(1).split("/")[0];
+    } else if (u.hostname.includes("youtube.com")) {
+      if (u.pathname === "/watch") {
+        id = u.searchParams.get("v");
+      } else if (u.pathname.startsWith("/embed/")) {
+        id = u.pathname.split("/")[2];
+      } else if (u.pathname.startsWith("/shorts/")) {
+        id = u.pathname.split("/")[2];
+      }
+    }
+    if (!id || !/^[a-zA-Z0-9_-]{6,}$/.test(id)) return null;
+    return `https://www.youtube.com/embed/${id}`;
+  } catch {
+    return null;
+  }
+}
+
 async function getRecipe(slug: string) {
   try {
     const recipe = await prisma.recipe.findUnique({
@@ -349,6 +372,24 @@ export default async function RecipePage({ params }: RecipePageProps) {
                     className="prose prose-lg max-w-none text-gray-700"
                     dangerouslySetInnerHTML={{ __html: recipe.content }}
                   />
+                </div>
+              )}
+
+              {/* YouTube Video */}
+              {recipe.videoUrl && getYouTubeEmbedUrl(recipe.videoUrl) && (
+                <div className="glass rounded-xl p-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                    ვიდეო რეცეპტი
+                  </h2>
+                  <div className="relative w-full overflow-hidden rounded-lg" style={{ paddingBottom: "56.25%" }}>
+                    <iframe
+                      src={getYouTubeEmbedUrl(recipe.videoUrl)!}
+                      title={recipe.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="absolute inset-0 h-full w-full border-0"
+                    />
+                  </div>
                 </div>
               )}
             </div>

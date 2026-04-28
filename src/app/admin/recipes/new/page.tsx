@@ -44,6 +44,7 @@ export default function NewRecipePage() {
     new Map()
   );
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
+  const [videoUrl, setVideoUrl] = useState("");
   const [prepTime, setPrepTime] = useState<number | "">("");
   const [cookTime, setCookTime] = useState<number | "">("");
   const [servings, setServings] = useState<number | "">("");
@@ -249,6 +250,7 @@ export default function NewRecipePage() {
           description,
           content: processedContent,
           mainImage: uploadedImageUrl || null,
+          videoUrl: videoUrl.trim() || null,
           prepTime: prepTime || null,
           cookTime: cookTime || null,
           servings: servings || null,
@@ -364,6 +366,21 @@ export default function NewRecipePage() {
                   Главное изображение
                 </label>
                 <ImageUploadLocal onFileSelect={setMainImageFile} />
+              </div>
+
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Видео YouTube (URL)
+                </label>
+                <Input
+                  type="url"
+                  value={videoUrl}
+                  onChange={(e) => setVideoUrl(e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Поддерживаются ссылки youtube.com/watch?v=..., youtu.be/... и youtube.com/embed/...
+                </p>
               </div>
 
               <div className="grid md:grid-cols-4 gap-4 mt-6">

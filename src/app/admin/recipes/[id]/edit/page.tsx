@@ -45,6 +45,7 @@ interface Recipe {
   ingredients: string;
   instructions: string;
   mainImage: string | null;
+  videoUrl: string | null;
   prepTime: number | null;
   cookTime: number | null;
   servings: number | null;
@@ -71,6 +72,7 @@ export default function EditRecipePage() {
     description: "",
     content: "",
     mainImage: "",
+    videoUrl: "",
     prepTime: "",
     cookTime: "",
     servings: "",
@@ -110,6 +112,7 @@ export default function EditRecipePage() {
         description: recipe.description || "",
         content: recipe.content,
         mainImage: recipe.mainImage || "",
+        videoUrl: recipe.videoUrl || "",
         prepTime: recipe.prepTime?.toString() || "",
         cookTime: recipe.cookTime?.toString() || "",
         servings: recipe.servings?.toString() || "",
@@ -397,6 +400,24 @@ export default function EditRecipePage() {
                     placeholder="https://example.com/image.jpg"
                     className="glass placeholder:text-gray-500"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Видео YouTube (URL)
+                  </label>
+                  <Input
+                    type="url"
+                    value={formData.videoUrl}
+                    onChange={(e) =>
+                      setFormData({ ...formData, videoUrl: e.target.value })
+                    }
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="glass placeholder:text-gray-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Поддерживаются ссылки youtube.com/watch?v=..., youtu.be/... и youtube.com/embed/...
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
